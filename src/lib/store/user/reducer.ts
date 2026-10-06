@@ -1,4 +1,4 @@
-import { entityFeature } from '@cartesianui/common';
+import { entityFeature } from '@cartesianui/platform-common';
 import { User } from '../../models';
 import { UserActions } from './actions';
 

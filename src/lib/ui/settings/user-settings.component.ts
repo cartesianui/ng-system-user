@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, computed, effect, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/common';
+import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { User } from '../../models';

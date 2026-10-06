@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { convertObjectKeysToCamel } from '@cartesianui/core';
+import { convertObjectKeysToCamel } from '@cartesianui/platform-core';
 
 @Injectable()
 export class UserAdapter {

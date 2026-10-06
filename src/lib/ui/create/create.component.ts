@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, effect, inject } from '@angular/core';
 import { Validators } from '@angular/forms';
-import { ENTITY_CONSTRUCTOR, FormBaseComponent, RequestType } from '@cartesianui/common';
+import { ENTITY_CONSTRUCTOR, FormBaseComponent, RequestType } from '@cartesianui/platform-common';
 import { UserSandbox } from '../../user.sandbox';
 import { User } from '../../models';
 import { FORM_IMPORTS } from '../../user.imports';
