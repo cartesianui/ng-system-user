@@ -1,6 +1,6 @@
-import { entityActions } from '@cartesianui/common';
+import { entityActions } from '@cartesianui/platform-common';
 import { createAction, props } from '@ngrx/store';
-import { IError } from '@cartesianui/core';
+import { IError } from '@cartesianui/platform-core';
 import { User, UserRole, UserPermission } from '../../models';
 
 const actions = entityActions<User, 'User'>('User');

@@ -19,8 +19,8 @@ import {
 } from '@swimlane/ngx-datatable';
 
 // Cartesian UI modules
-import { CommonModule as CartesianCommonModule , SelectControlComponent } from '@cartesianui/common';
-import { ShellModule } from '@cartesianui/coreui';
+import { CommonModule as CartesianCommonModule , SelectControlComponent } from '@cartesianui/platform-common';
+import { ShellModule } from '@cartesianui/platform-coreui';
 
 /**
  * 🧩 Core shared imports

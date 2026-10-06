@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BaseComponent } from '@cartesianui/common';
+import { BaseComponent } from '@cartesianui/platform-common';
 import { UserSandbox } from '../../user.sandbox';
 import { FORM_IMPORTS } from '../../user.imports';
 

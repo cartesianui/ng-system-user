@@ -1,4 +1,4 @@
-import { BaseModel } from '@cartesianui/common';
+import { BaseModel } from '@cartesianui/platform-common';
 
 export interface IUserReference {
   id?: string;

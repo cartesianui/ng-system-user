@@ -1,4 +1,4 @@
-import { BaseModel, enumMeta, EntityMeta } from '@cartesianui/common';
+import { BaseModel, enumMeta, EntityMeta } from '@cartesianui/platform-common';
 import { Validators } from '@angular/forms';
 import { Role, Permission } from '@cartesianui/system-auth';
 

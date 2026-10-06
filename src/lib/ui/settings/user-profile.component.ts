@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/common';
+import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
 import { User } from '../../models';
 import { UserSandbox } from '../../user.sandbox';

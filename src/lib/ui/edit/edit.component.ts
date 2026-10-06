@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Signal, OnDestroy, effect, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/common';
+import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { Role, Permission, PermissionsWidgetComponent, RolesLookupWidgetComponent, PermissionsLookupWidgetComponent, RolesWidgetComponent } from '@cartesianui/system-auth';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
 import { User, UserPermission, UserRole } from '../../models';
