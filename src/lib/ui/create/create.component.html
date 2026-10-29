@@ -55,7 +55,7 @@
               <input class="form-check-input" type="checkbox" id="create-user-login-access" formControlName="loginAccess" />
               <label class="form-check-label" for="create-user-login-access">Can log in</label>
             </div>
-            <small class="form-text text-muted">Off creates a record with no username or password; it can be invited later from the user's Security card.</small>
+            <small class="form-text text-muted">Off creates a record with no username or password.</small>
             @if (canLogIn()) {
               <div class="form-group mt-2">
                 <with-validation>
