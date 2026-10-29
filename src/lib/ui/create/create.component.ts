@@ -10,12 +10,12 @@ import { FORM_IMPORTS } from '../../user.imports';
 declare const cartesian: any;
 
 /**
- * The tenant's `user_management.login_access_staff`, from the public configuration bundle that app init
+ * The tenant's `user_management.login_access_user`, from the public configuration bundle that app init
  * merges into the `cartesian` global (camelCased, like `cartesian.tax.overlayEnabled`). Unset means the
  * server default, `true`.
  */
-function tenantLoginAccessStaff(): boolean {
-  const value = typeof cartesian !== 'undefined' ? cartesian?.userManagement?.loginAccessStaff : undefined;
+function tenantLoginAccessUser(): boolean {
+  const value = typeof cartesian !== 'undefined' ? cartesian?.userManagement?.loginAccessUser : undefined;
   return !(value === false || value === 'false' || value === 0 || value === '0');
 }
 
@@ -66,7 +66,7 @@ export class CreateUserComponent extends FormBaseComponent<User> implements OnIn
     // Create-only rule (rulebook #8.7): every new user gets a role. Email and password are optional.
     this.formGroup.get('roleId')?.addValidators(Validators.required);
     this.formGroup.get('roleId')?.updateValueAndValidity();
-    this.formGroup.get('loginAccess')?.setValue(tenantLoginAccessStaff());
+    this.formGroup.get('loginAccess')?.setValue(tenantLoginAccessUser());
     this.canLogIn.set(this.formGroup.get('loginAccess')?.value === true);
   }
 

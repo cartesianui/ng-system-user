@@ -69,7 +69,7 @@ export interface IUser {
     { key: 'password', label: 'Password', opt: { validators: [Validators.minLength(8)] } },
     { key: 'confirmPassword', label: 'Confirm Password', opt: {} },
     // Create-only (`POST /v1/users`). `roleId` is made required in the create component; `loginAccess`
-    // defaults there to the tenant's `user_management.login_access_staff`.
+    // defaults there to the tenant's `user_management.login_access_user`.
     { key: 'roleId', label: 'Role', opt: {} },
     { key: 'loginAccess', label: 'Can log in', opt: {} },
   ],
@@ -91,7 +91,7 @@ export class User extends BaseModel implements IUser {
   public logged: boolean;
   /** Write-only, `POST /v1/users`: the role given on create. */
   public roleId?: string;
-  /** Write-only, `POST /v1/users`: overrides the tenant's `login_access_staff` for this user. */
+  /** Write-only, `POST /v1/users`: overrides the tenant's `login_access_user` for this user. */
   public loginAccess?: boolean;
   public roles: Role[] = [];
   public permissions: Permission[] = [];
