@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { Role, Permission, PermissionsWidgetComponent, RolesLookupWidgetComponent, PermissionsLookupWidgetComponent, RolesWidgetComponent } from '@cartesianui/system-auth';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
-import { User, UserPermission, UserRole } from '../../models';
+import { User, UserPermission, UserRole, tenantLoginAccess } from '../../models';
 import { UserSandbox } from '../../user.sandbox';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { FORM_IMPORTS } from '../../user.imports';
@@ -40,6 +40,9 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
     birth: new FormControl('', []),
     nationalId: new FormControl('', [Validators.maxLength(50)])
   });
+
+  /** The tenant's `user_management.login_access_user`: the invite is offered only while it is on. */
+  protected readonly canLogIn = tenantLoginAccess('user');
 
   /** True while an invite request is in flight; disables the button. */
   readonly inviting = signal(false);
