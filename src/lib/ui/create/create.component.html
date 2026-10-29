@@ -30,6 +30,7 @@
               <with-validation>
                 <label class="form-label">Email</label>
                 <input validate type="text" formControlName="email" class="form-control" placeholder="email@example.com" email />
+                <small class="form-text text-muted">Optional. Without an email this person cannot log in.</small>
               </with-validation>
             </div>
             <div class="form-group mt-2">
@@ -67,7 +68,7 @@
                   <label class="form-label">Password</label>
                   <input validate type="password" formControlName="password" class="form-control" placeholder="Minimum 8 characters" minlength="8" autocomplete="new-password" />
                 </with-validation>
-                <small class="form-text text-muted">Optional. Leave it blank and a set-password link can be emailed instead (the tenant's welcome email, or "Invite / resend set-password link" on the user).</small>
+                <small class="form-text text-muted">Optional. Leave blank and the person can set their own password from an email link.</small>
               </div>
               <div class="form-group mt-2">
                 <with-validation>
