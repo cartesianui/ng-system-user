@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Signal, OnDestroy, effect, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, Signal, OnDestroy, effect, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { Role, Permission, PermissionsWidgetComponent, RolesLookupWidgetComponent, PermissionsLookupWidgetComponent, RolesWidgetComponent } from '@cartesianui/system-auth';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
@@ -37,8 +37,12 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', []),
     gender: new FormControl('Gender', []),
-    birth: new FormControl('', [])
+    birth: new FormControl('', []),
+    nationalId: new FormControl('', [Validators.maxLength(50)])
   });
+
+  /** True while an invite request is in flight; disables the button. */
+  readonly inviting = signal(false);
 
   formGroupCredentails: FormGroup = new FormGroup({
     currentPassword: new FormControl('', []),
@@ -72,7 +76,9 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
         new User({
           name: this.formGroup.controls.name.value,
           gender: this.formGroup.controls.gender.value,
-          birth: DatetimeService.fromJSDate(new Date(this.formGroup.controls.birth.value)).toISO()
+          birth: DatetimeService.fromJSDate(new Date(this.formGroup.controls.birth.value)).toISO(),
+          // Blank clears it: `PATCH {"national_id": null}`.
+          nationalId: this.formGroup.controls.nationalId.value || null
         })
       );
     }
@@ -83,6 +89,28 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
         newPassword: this.formGroupCredentails.controls.newPassword.value
       });
     }
+  }
+
+  /**
+   * `POST /v1/users/{id}/invite`: a record gets a username (its email), an account keeps its own; either way a
+   * fresh set-password link is emailed and older links stop working. A 422 (no email, a username clash, an
+   * AI or system user) is shown by the global error toast with the server's message.
+   */
+  onInvite(): void {
+    const user = this.user();
+    if (!user?.id || !user.email || this.inviting()) return;
+    this.inviting.set(true);
+    this.subscriptions.push(
+      this.sb.inviteUser(user.id).subscribe({
+        next: () => {
+          this.inviting.set(false);
+          this.notify.success(`A set-password link was sent to ${user.email}.`, 'Link sent');
+          // The invite may have given a record its username; reload so the read-only field shows it.
+          this.sb.user.getById(user.id, 'roles,permissions,image');
+        },
+        error: () => this.inviting.set(false)
+      })
+    );
   }
 
   onRevoke() {

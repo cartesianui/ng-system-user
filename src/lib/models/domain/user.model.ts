@@ -20,9 +20,12 @@ export const GenderMeta = enumMeta(Genders, {
 export interface IUser {
   id?: string | undefined;
   name: string | undefined;
+  /** The login identifier. Null on a record that cannot log in. Read-only on the FE after create. */
+  username?: string | undefined;
   nickname?: string | undefined;
   birth?: string | undefined;
   email?: string | undefined;
+  nationalId?: string | undefined;
   gender?: string | undefined;
   confirmed?: boolean | undefined;
   password?: string;
@@ -57,11 +60,18 @@ export interface IUser {
   ],
   form: [
     { key: 'name', label: 'Name', opt: { validators: [Validators.required, Validators.maxLength(255)] } },
-    { key: 'email', label: 'Email', opt: { validators: [Validators.required, Validators.email] } },
+    // Optional (user identity, 2026-10-29): a user may be created with no email and no login.
+    { key: 'username', label: 'Username', opt: { validators: [Validators.maxLength(255)] } },
+    { key: 'email', label: 'Email', opt: { validators: [Validators.email] } },
+    { key: 'nationalId', label: 'National ID', opt: { validators: [Validators.maxLength(50)] } },
     { key: 'gender', label: 'Gender', opt: {} },
     { key: 'birth', label: 'Birth Date', opt: { formatter: { type: 'date' } } },
     { key: 'password', label: 'Password', opt: { validators: [Validators.minLength(8)] } },
     { key: 'confirmPassword', label: 'Confirm Password', opt: {} },
+    // Create-only (`POST /v1/users`). `roleId` is made required in the create component; `loginAccess`
+    // defaults there to the tenant's `user_management.login_access_staff`.
+    { key: 'roleId', label: 'Role', opt: {} },
+    { key: 'loginAccess', label: 'Can log in', opt: {} },
   ],
   search: [
     'name:like',
@@ -71,12 +81,18 @@ export interface IUser {
 export class User extends BaseModel implements IUser {
   public id: string;
   public name: string;
+  public username: string;
   public nickname: string;
   public birth: string;
   public confirmed: boolean;
   public email: string;
+  public nationalId: string;
   public gender: string;
   public logged: boolean;
+  /** Write-only, `POST /v1/users`: the role given on create. */
+  public roleId?: string;
+  /** Write-only, `POST /v1/users`: overrides the tenant's `login_access_staff` for this user. */
+  public loginAccess?: boolean;
   public roles: Role[] = [];
   public permissions: Permission[] = [];
   image?: any;

@@ -22,8 +22,20 @@
             </div>
             <div class="form-group required mt-2">
               <with-validation>
+                <label class="form-label">Role</label>
+                <select-control validate required formControlName="roleId" [options]="roleOptions()" optionKey="value" optionField="name" placeholder="Select Role"></select-control>
+              </with-validation>
+            </div>
+            <div class="form-group mt-2">
+              <with-validation>
                 <label class="form-label">Email</label>
-                <input validate type="text" formControlName="email" class="form-control" placeholder="email@example.com" required email />
+                <input validate type="text" formControlName="email" class="form-control" placeholder="email@example.com" email />
+              </with-validation>
+            </div>
+            <div class="form-group mt-2">
+              <with-validation>
+                <label class="form-label">National ID</label>
+                <input validate type="text" formControlName="nationalId" class="form-control" placeholder="National ID" maxlength="50" />
               </with-validation>
             </div>
             <div class="form-group mt-2">
@@ -38,18 +50,32 @@
                 <input validate type="text" formControlName="birth" class="form-control" placeholder="Date of Birth" bsDatepicker />
               </with-validation>
             </div>
-            <div class="form-group required mt-2">
-              <with-validation>
-                <label class="form-label">Password</label>
-                <input validate type="password" formControlName="password" class="form-control" placeholder="Minimum 8 characters" required minlength="8" />
-              </with-validation>
+            <div class="form-check form-switch mt-3">
+              <input class="form-check-input" type="checkbox" id="create-user-login-access" formControlName="loginAccess" />
+              <label class="form-check-label" for="create-user-login-access">Can log in</label>
             </div>
-            <div class="form-group required mt-2">
-              <with-validation>
-                <label class="form-label">Confirm Password</label>
-                <input validate type="password" formControlName="confirmPassword" class="form-control" placeholder="Re-enter password" required equalTo="password" />
-              </with-validation>
-            </div>
+            <small class="form-text text-muted">Off creates a record with no username or password; it can be invited later from the user's Security card.</small>
+            @if (canLogIn()) {
+              <div class="form-group mt-2">
+                <with-validation>
+                  <label class="form-label">Username</label>
+                  <input validate type="text" formControlName="username" class="form-control" placeholder="Defaults to the email" maxlength="255" autocomplete="off" />
+                </with-validation>
+              </div>
+              <div class="form-group mt-2">
+                <with-validation>
+                  <label class="form-label">Password</label>
+                  <input validate type="password" formControlName="password" class="form-control" placeholder="Minimum 8 characters" minlength="8" autocomplete="new-password" />
+                </with-validation>
+                <small class="form-text text-muted">Optional. Leave it blank and a set-password link can be emailed instead (the tenant's welcome email, or "Invite / resend set-password link" on the user).</small>
+              </div>
+              <div class="form-group mt-2">
+                <with-validation>
+                  <label class="form-label">Confirm Password</label>
+                  <input validate type="password" formControlName="confirmPassword" class="form-control" placeholder="Re-enter password" equalTo="password" autocomplete="new-password" />
+                </with-validation>
+              </div>
+            }
           </form>
         </div>
       </div>

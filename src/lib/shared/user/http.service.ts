@@ -3,6 +3,11 @@ import { Observable } from 'rxjs';
 import { IHttpService, HttpService, POST, GET, Body, Criteria, DefaultHeaders, RequestCriteriaOuput, Path, Query, DELETE, PATCH, PUT, ICartesianResponse } from '@cartesianui/platform-core';
 import { User, UserPermission, UserRole } from '../../models';
 
+/** Body of `POST /v1/users/{id}/invite`. `username` is used only when the user has none yet. */
+export interface IInviteUserPayload {
+  username?: string;
+}
+
 export type IUserHttpServiceExtension = {
   updateUserCredentials: (id: string, body: { currentPassword: string; newPassword: string }) => Observable<ICartesianResponse>;
   profile: (token: string) => Observable<ICartesianResponse>;
@@ -13,6 +18,7 @@ export type IUserHttpServiceExtension = {
   revokePermissions: (id: string, body: UserPermission) => Observable<ICartesianResponse>;
   vendors: (criteria: RequestCriteriaOuput) => Observable<ICartesianResponse>;
   customers: (criteria: RequestCriteriaOuput) => Observable<ICartesianResponse>;
+  invite: (id: string, body: IInviteUserPayload) => Observable<ICartesianResponse>;
 };
 
 @Injectable()
@@ -32,7 +38,9 @@ export class UserHttpService extends HttpService implements IHttpService<User, I
     return null;
   }
 
-  @POST('/register')
+  // The admin create (role, plan limit, optional email/password, login access). Not `/register`, which is
+  // self-registration and stays as it is.
+  @POST('/users')
   public create(@Body body: User): Observable<any> {
     return null;
   }
@@ -89,6 +97,12 @@ export class UserHttpService extends HttpService implements IHttpService<User, I
 
   @DELETE('/users/{id}/permissions?include=roles,permissions')
   public revokePermissions(@Path('id') id: string, @Body body: UserPermission): Observable<any> {
+    return null;
+  }
+
+  /** Gives the user a login if it has none, then emails a fresh set-password link (older links stop working). */
+  @POST('/users/{id}/invite')
+  public invite(@Path('id') id: string, @Body body: IInviteUserPayload): Observable<any> {
     return null;
   }
 }
