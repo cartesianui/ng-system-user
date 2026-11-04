@@ -93,8 +93,8 @@ export class User extends BaseModel implements IUser {
   public roleId?: string;
   /** Write-only, `POST /v1/users`: overrides the tenant's `login_access_user` for this user. */
   public loginAccess?: boolean;
-  public roles: Role[] = [];
-  public permissions: Permission[] = [];
+  public roles: Role[];
+  public permissions: Permission[];
   image?: any;
 
   constructor(data?: any) {
@@ -102,12 +102,10 @@ export class User extends BaseModel implements IUser {
     if (data?.image?.data && !Array.isArray(data.image.data)) {
       this.image = data.image.data;
     }
-    if (data?.roles?.data) {
-      this.roles = data.roles.data;
-    }
-    if (data?.permissions?.data) {
-      this.permissions = data.permissions.data;
-    }
+    // A row from the API nests these under `data`; a row already built here (the listing's Edit
+    // puts it back in the store) holds the plain array. Both shapes must survive.
+    this.roles = data?.roles?.data ?? data?.roles ?? [];
+    this.permissions = data?.permissions?.data ?? data?.permissions ?? [];
   }
 
 
