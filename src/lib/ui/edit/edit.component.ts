@@ -89,7 +89,8 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
     if (this.formGroupCredentails.dirty && this.formGroupCredentails.valid) {
       this.sb.updateUserCredentials(this.user()?.id, {
         currentPassword: this.formGroupCredentails.controls.currentPassword.value,
-        newPassword: this.formGroupCredentails.controls.newPassword.value
+        newPassword: this.formGroupCredentails.controls.newPassword.value,
+        newPasswordConfirmation: this.formGroupCredentails.controls.confirmPassword.value
       });
     }
   }

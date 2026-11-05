@@ -18,7 +18,7 @@ export class UserSandbox extends Sandbox {
     model: User
   });
 
-  updateUserCredentials(id: string, credentials: { currentPassword: string; newPassword: string }): void {
+  updateUserCredentials(id: string, credentials: { currentPassword: string; newPassword: string; newPasswordConfirmation: string }): void {
     this.store.dispatch(UserActions.updateUserCredentials({ user: { id, changes: credentials } }));
   }
 

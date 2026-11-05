@@ -100,6 +100,7 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
     this.sb.updateUserCredentials(id, {
       currentPassword: this.formGroupCredentials.controls.currentPassword.value || '',
       newPassword: this.formGroupCredentials.controls.newPassword.value || '',
+      newPasswordConfirmation: this.formGroupCredentials.controls.confirmPassword.value || '',
     });
   }
 }
