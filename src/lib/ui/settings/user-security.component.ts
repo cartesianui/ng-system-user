@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BaseComponent } from '@cartesianui/platform-common';
+import { BaseComponent, RequestType } from '@cartesianui/platform-common';
 import { UserSandbox } from '../../user.sandbox';
 import { FORM_IMPORTS } from '../../user.imports';
 
@@ -27,6 +27,13 @@ export class UserSecurityComponent extends BaseComponent {
     currentPassword: new FormControl(''),
     newPassword: new FormControl(''),
     confirmPassword: new FormControl(''),
+  });
+
+  private readonly updateCompletedEffect = effect(() => {
+    if (!this.sb.user.updateCompleted()) return;
+    this.notify.success('Successfully Updated', 'Success');
+    this.formGroupCredentials.reset();
+    this.sb.user.clearRequestState(RequestType.Update);
   });
 
   onUpdateCredentials(): void {
