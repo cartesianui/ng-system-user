@@ -36,6 +36,7 @@ export class UserSecurityComponent extends BaseComponent {
     this.sb.updateUserCredentials(id, {
       currentPassword: this.formGroupCredentials.controls.currentPassword.value || '',
       newPassword: this.formGroupCredentials.controls.newPassword.value || '',
+      newPasswordConfirmation: this.formGroupCredentials.controls.confirmPassword.value || '',
     });
   }
 }

@@ -9,7 +9,7 @@ export interface IInviteUserPayload {
 }
 
 export type IUserHttpServiceExtension = {
-  updateUserCredentials: (id: string, body: { currentPassword: string; newPassword: string }) => Observable<ICartesianResponse>;
+  updateUserCredentials: (id: string, body: { currentPassword: string; newPassword: string; newPasswordConfirmation: string }) => Observable<ICartesianResponse>;
   profile: (token: string) => Observable<ICartesianResponse>;
   assignRole: (id: string, body: UserRole) => Observable<ICartesianResponse>;
   syncRole: (id: string, body: UserRole) => Observable<ICartesianResponse>;
@@ -56,7 +56,7 @@ export class UserHttpService extends HttpService implements IHttpService<User, I
   }
 
   @PATCH('/users/{id}/password')
-  public updateUserCredentials(@Path('id') id: string, @Body body: { currentPassword: string; newPassword: string }): Observable<any> {
+  public updateUserCredentials(@Path('id') id: string, @Body body: { currentPassword: string; newPassword: string; newPasswordConfirmation: string }): Observable<any> {
     return null;
   }
 
