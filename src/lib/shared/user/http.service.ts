@@ -19,6 +19,8 @@ export type IUserHttpServiceExtension = {
   vendors: (criteria: RequestCriteriaOuput) => Observable<ICartesianResponse>;
   customers: (criteria: RequestCriteriaOuput) => Observable<ICartesianResponse>;
   invite: (id: string, body: IInviteUserPayload) => Observable<ICartesianResponse>;
+  listApps: (id: string) => Observable<ICartesianResponse>;
+  syncApps: (id: string, body: { appIds: string[] }) => Observable<ICartesianResponse>;
 };
 
 @Injectable()
@@ -103,6 +105,18 @@ export class UserHttpService extends HttpService implements IHttpService<User, I
   /** Gives the user a login if it has none, then emails a fresh set-password link (older links stop working). */
   @POST('/users/{id}/invite')
   public invite(@Path('id') id: string, @Body body: IInviteUserPayload): Observable<any> {
+    return null;
+  }
+
+  /** Every app, each with `allowed` for this user (per-user app access). */
+  @GET('/users/{id}/apps')
+  public listApps(@Path('id') id: string): Observable<any> {
+    return null;
+  }
+
+  /** The apps this user may sign in to. Every app sent = no limit. At least one. */
+  @PUT('/users/{id}/apps')
+  public syncApps(@Path('id') id: string, @Body body: { appIds: string[] }): Observable<any> {
     return null;
   }
 }
