@@ -108,13 +108,13 @@ export class UserHttpService extends HttpService implements IHttpService<User, I
     return null;
   }
 
-  /** Every app, each with `allowed` for this user (per-user app access). */
+  /** Every app, each with `allowed` when the user has a row for it (per-user app access). */
   @GET('/users/{id}/apps')
   public listApps(@Path('id') id: string): Observable<any> {
     return null;
   }
 
-  /** The apps this user may sign in to. Every app sent = no limit. At least one. */
+  /** The apps this user may sign in to, stored exactly. An empty list = no app. */
   @PUT('/users/{id}/apps')
   public syncApps(@Path('id') id: string, @Body body: { appIds: string[] }): Observable<any> {
     return null;
