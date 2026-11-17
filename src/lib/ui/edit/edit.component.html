@@ -18,7 +18,7 @@
   *ngIf="activeTab === 'Apps'"
   (update)="onSaveApps()"
   [disabled]="{
-    update: !appsChanged() || noAppAllowed() || savingApps()
+    update: !appsChanged() || savingApps()
   }"
 />
 <page-actions
@@ -150,8 +150,8 @@
             <div class="card-body">
               <p class="text-muted small mb-3">
                 The apps this user may sign in to. A domain that serves an app refuses anyone not allowed into it,
-                at sign-in and on every request. With every app on, the user is not limited, including apps added later.
-                Tenant admins are never limited.
+                at sign-in and on every request. Only the apps switched on are granted: a user with none can sign in
+                to no app-linked domain. Tenant admins and host users are never limited.
               </p>
               @for (app of apps(); track app.id) {
                 <div class="form-check form-switch mb-2">
@@ -169,7 +169,7 @@
                 <p class="text-muted small mb-0">No apps are set up yet.</p>
               }
               @if (noAppAllowed()) {
-                <small class="text-danger d-block mt-2">Leave at least one app on. To stop this user signing in at all, deactivate the account.</small>
+                <small class="text-warning d-block mt-2">No apps: this user is refused on every domain that serves an app.</small>
               }
             </div>
           </div>

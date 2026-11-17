@@ -57,7 +57,8 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
 
   // ── Apps tab: per-user app access (owner, 2026-11-17) ───────────────────────────────────────────
   // Which logged-in apps (Admin, POS, Care) this user may sign in to. A domain that serves an app
-  // refuses a user not allowed into it, at login and on every request. Every app on = no limit.
+  // refuses a user not allowed into it, at login and on every request. Explicit grant only (owner,
+  // 2026-11-17): the switches show the user's real rows, and none on means no app.
 
   /** The apps as the server last answered, each with `allowed`. */
   protected readonly apps = signal<UserApp[]>([]);
@@ -199,10 +200,10 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
     this.appToggles.update((toggles) => ({ ...toggles, [appId]: allowed }));
   }
 
-  /** Save the toggles. Every app on is stored as "no limit" by the server. */
+  /** Save the toggles exactly: each app on is one row; none on is saved too, and means no app. */
   onSaveApps(): void {
     const id = this.user()?.id;
-    if (!id || this.noAppAllowed() || this.savingApps()) return;
+    if (!id || this.savingApps()) return;
     const appIds = this.apps().filter((app) => this.appToggles()[app.id]).map((app) => app.id);
     this.savingApps.set(true);
     this.subscriptions.push(
