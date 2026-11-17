@@ -15,6 +15,13 @@
   }"
 />
 <page-actions
+  *ngIf="activeTab === 'Apps'"
+  (update)="onSaveApps()"
+  [disabled]="{
+    update: !appsChanged() || noAppAllowed() || savingApps()
+  }"
+/>
+<page-actions
   *ngIf="activeTab === 'Permissions'"
   (attach)="onAttachPermissions()"
   (revoke)="onRevokePermissions()"
@@ -130,6 +137,40 @@
             </div>
             <div class="card-body">
               <roles-list [rows]="user()?.roles" [(selected)]="rolesToRevoke" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab heading="Apps" (selectTab)="onSelectTab($event)">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card mt-2">
+            <div class="card-header"><strong>App access</strong></div>
+            <div class="card-body">
+              <p class="text-muted small mb-3">
+                The apps this user may sign in to. A domain that serves an app refuses anyone not allowed into it,
+                at sign-in and on every request. With every app on, the user is not limited, including apps added later.
+                Tenant admins are never limited.
+              </p>
+              @for (app of apps(); track app.id) {
+                <div class="form-check form-switch mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    [id]="'user-app-' + app.key"
+                    [checked]="!!appToggles()[app.id]"
+                    (change)="onToggleApp(app.id, $any($event.target).checked)"
+                  />
+                  <label class="form-check-label" [for]="'user-app-' + app.key">{{ app.name }}</label>
+                </div>
+              } @empty {
+                <p class="text-muted small mb-0">No apps are set up yet.</p>
+              }
+              @if (noAppAllowed()) {
+                <small class="text-danger d-block mt-2">Leave at least one app on. To stop this user signing in at all, deactivate the account.</small>
+              }
             </div>
           </div>
         </div>

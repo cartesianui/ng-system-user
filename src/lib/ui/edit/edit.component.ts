@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, Signal, OnDestroy, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, OnDestroy, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { Role, Permission, PermissionsWidgetComponent, RolesLookupWidgetComponent, PermissionsLookupWidgetComponent, RolesWidgetComponent } from '@cartesianui/system-auth';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
-import { User, UserPermission, UserRole, tenantLoginAccess } from '../../models';
+import { User, UserApp, UserPermission, UserRole, tenantLoginAccess } from '../../models';
 import { UserSandbox } from '../../user.sandbox';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { FORM_IMPORTS } from '../../user.imports';
@@ -54,6 +54,31 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
   });
 
   activeTab: string = 'General';
+
+  // ── Apps tab: per-user app access (owner, 2026-11-17) ───────────────────────────────────────────
+  // Which logged-in apps (Admin, POS, Care) this user may sign in to. A domain that serves an app
+  // refuses a user not allowed into it, at login and on every request. Every app on = no limit.
+
+  /** The apps as the server last answered, each with `allowed`. */
+  protected readonly apps = signal<UserApp[]>([]);
+
+  /** The toggles as the operator has them, by app id. */
+  protected readonly appToggles = signal<Record<string, boolean>>({});
+
+  protected readonly savingApps = signal(false);
+
+  protected readonly appsChanged = computed(() =>
+    this.apps().some((app) => !!this.appToggles()[app.id] !== app.allowed)
+  );
+
+  protected readonly noAppAllowed = computed(() =>
+    this.apps().length > 0 && !this.apps().some((app) => this.appToggles()[app.id])
+  );
+
+  private readonly appsEffect = effect(() => {
+    const id = this.user()?.id;
+    if (id) this.loadApps(id);
+  });
 
   private readonly selectEffect = effect(() => {
     const user = this.user();
@@ -155,6 +180,41 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
     });
     this.sb.attachPermissions(this.user()?.id, form);
     this.permissionsToAttach = [];
+  }
+
+  private loadApps(id: string): void {
+    this.subscriptions.push(
+      this.sb.userApps(id).subscribe({
+        next: (res: any) => this.setApps(res?.data ?? res ?? [])
+      })
+    );
+  }
+
+  private setApps(apps: UserApp[]): void {
+    this.apps.set(apps);
+    this.appToggles.set(Object.fromEntries(apps.map((app) => [app.id, !!app.allowed])));
+  }
+
+  onToggleApp(appId: string, allowed: boolean): void {
+    this.appToggles.update((toggles) => ({ ...toggles, [appId]: allowed }));
+  }
+
+  /** Save the toggles. Every app on is stored as "no limit" by the server. */
+  onSaveApps(): void {
+    const id = this.user()?.id;
+    if (!id || this.noAppAllowed() || this.savingApps()) return;
+    const appIds = this.apps().filter((app) => this.appToggles()[app.id]).map((app) => app.id);
+    this.savingApps.set(true);
+    this.subscriptions.push(
+      this.sb.syncUserApps(id, appIds).subscribe({
+        next: (res: any) => {
+          this.savingApps.set(false);
+          this.setApps(res?.data ?? res ?? []);
+          this.notify.success('App access saved', 'Success');
+        },
+        error: () => this.savingApps.set(false)
+      })
+    );
   }
 
   onSelectTab(data: TabDirective): void {

@@ -45,4 +45,14 @@ export class UserSandbox extends Sandbox {
   inviteUser(id: string, body: IInviteUserPayload = {}): Observable<any> {
     return this.userHttpService.invite(id, body);
   }
+
+  /** `GET /users/{id}/apps`: every app, each with `allowed` for this user. */
+  userApps(id: string): Observable<any> {
+    return this.userHttpService.listApps(id);
+  }
+
+  /** `PUT /users/{id}/apps`: the apps this user may sign in to. */
+  syncUserApps(id: string, appIds: string[]): Observable<any> {
+    return this.userHttpService.syncApps(id, { appIds });
+  }
 }
