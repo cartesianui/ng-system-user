@@ -13,108 +13,113 @@
       <div class="card">
         <div class="card-body">
           <form autocomplete="off" [formGroup]="formGroup">
-            <h6 class="text-muted mb-3">Identity</h6>
             <div class="row">
-              <div class="col-md-6">
-                <div class="form-group required">
-                  <with-validation>
-                    <label class="form-label">Name</label>
-                    <input validate type="text" formControlName="name" class="form-control" placeholder="Full name" required />
-                  </with-validation>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <with-validation>
-                    <label class="form-label">National ID</label>
-                    <input validate type="text" formControlName="nationalId" class="form-control" placeholder="National ID" maxlength="50" />
-                  </with-validation>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <with-validation>
-                    <label class="form-label">Gender</label>
-                    <select-control validate formControlName="gender" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Select Gender"></select-control>
-                  </with-validation>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <with-validation>
-                    <label class="form-label">Date of Birth</label>
-                    <input validate type="text" formControlName="birth" class="form-control" placeholder="Date of Birth" bsDatepicker />
-                  </with-validation>
-                </div>
-              </div>
-            </div>
-
-            <hr />
-            <h6 class="text-muted mb-3">Contact</h6>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group mt-2">
-                  <with-validation>
-                    <label class="form-label">Email</label>
-                    <input validate type="text" formControlName="email" class="form-control" placeholder="email@example.com" email />
-                    <small class="form-text text-muted">Optional. Without an email this person cannot log in.</small>
-                  </with-validation>
-                </div>
-              </div>
-            </div>
-
-            <hr />
-            <h6 class="text-muted mb-3">Login</h6>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-check form-switch mt-3">
-                  <input class="form-check-input" type="checkbox" id="create-user-login-access" formControlName="loginAccess" />
-                  <label class="form-check-label" for="create-user-login-access">Can log in</label>
-                </div>
-                <small class="form-text text-muted">Off creates a record with no username or password.</small>
-              </div>
-            </div>
-            @if (canLogIn()) {
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group mt-2">
-                    <with-validation>
-                      <label class="form-label">Username</label>
-                      <input validate type="text" formControlName="username" class="form-control" placeholder="Defaults to the email" maxlength="255" autocomplete="off" />
-                    </with-validation>
+              <div class="col-xl-6">
+                <h6 class="text-muted mb-3">Identity</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group required">
+                      <with-validation>
+                        <label class="form-label">Name</label>
+                        <input validate type="text" formControlName="name" class="form-control" placeholder="Full name" required />
+                      </with-validation>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group mt-2">
-                    <with-validation>
-                      <label class="form-label">Password</label>
-                      <input validate type="password" formControlName="password" class="form-control" placeholder="Minimum 8 characters" minlength="8" autocomplete="new-password" />
-                    </with-validation>
-                    <small class="form-text text-muted">Optional. Leave blank and the person can set their own password from an email link.</small>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group mt-2">
+                      <with-validation>
+                        <label class="form-label">National ID</label>
+                        <input validate type="text" formControlName="nationalId" class="form-control" placeholder="National ID" maxlength="50" />
+                      </with-validation>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group mt-2">
+                      <with-validation>
+                        <label class="form-label">Gender</label>
+                        <select-control validate formControlName="gender" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Select Gender"></select-control>
+                      </with-validation>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group mt-2">
+                      <with-validation>
+                        <label class="form-label">Date of Birth</label>
+                        <input validate type="text" formControlName="birth" class="form-control" placeholder="Date of Birth" bsDatepicker />
+                      </with-validation>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group mt-2">
-                    <with-validation>
-                      <label class="form-label">Confirm Password</label>
-                      <input validate type="password" formControlName="confirmPassword" class="form-control" placeholder="Re-enter password" equalTo="password" autocomplete="new-password" />
-                    </with-validation>
+
+                <hr />
+                <h6 class="text-muted mb-3">Contact</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group mt-2">
+                      <with-validation>
+                        <label class="form-label">Email</label>
+                        <input validate type="text" formControlName="email" class="form-control" placeholder="email@example.com" email />
+                        <small class="form-text text-muted">Optional. Without an email this person cannot log in.</small>
+                      </with-validation>
+                    </div>
                   </div>
                 </div>
               </div>
-            }
+              <div class="col-xl-6">
+                <hr class="d-xl-none" />
+                <h6 class="text-muted mb-3">Login</h6>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-check form-switch mt-3">
+                      <input class="form-check-input" type="checkbox" id="create-user-login-access" formControlName="loginAccess" />
+                      <label class="form-check-label" for="create-user-login-access">Can log in</label>
+                    </div>
+                    <small class="form-text text-muted">Off creates a record with no username or password.</small>
+                  </div>
+                </div>
+                @if (canLogIn()) {
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mt-2">
+                        <with-validation>
+                          <label class="form-label">Username</label>
+                          <input validate type="text" formControlName="username" class="form-control" placeholder="Defaults to the email" maxlength="255" autocomplete="off" />
+                        </with-validation>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mt-2">
+                        <with-validation>
+                          <label class="form-label">Password</label>
+                          <input validate type="password" formControlName="password" class="form-control" placeholder="Minimum 8 characters" minlength="8" autocomplete="new-password" />
+                        </with-validation>
+                        <small class="form-text text-muted">Optional. Leave blank and the person can set their own password from an email link.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mt-2">
+                        <with-validation>
+                          <label class="form-label">Confirm Password</label>
+                          <input validate type="password" formControlName="confirmPassword" class="form-control" placeholder="Re-enter password" equalTo="password" autocomplete="new-password" />
+                        </with-validation>
+                      </div>
+                    </div>
+                  </div>
+                }
 
-            <hr />
-            <h6 class="text-muted mb-3">Access</h6>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group required mt-2">
-                  <with-validation>
-                    <label class="form-label">Role</label>
-                    <select-control validate required formControlName="roleId" [options]="roleOptions()" optionKey="value" optionField="name" placeholder="Select Role"></select-control>
-                  </with-validation>
+                <hr />
+                <h6 class="text-muted mb-3">Access</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group required mt-2">
+                      <with-validation>
+                        <label class="form-label">Role</label>
+                        <select-control validate required formControlName="roleId" [options]="roleOptions()" optionKey="value" optionField="name" placeholder="Select Role"></select-control>
+                      </with-validation>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
