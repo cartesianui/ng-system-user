@@ -2,8 +2,8 @@
   <h4 class="mb-0">Profile</h4>
 </div>
 
-<div class="row mt-3">
-  <div class="col-lg-8 col-md-10">
+<div class="row justify-content-center mt-3">
+  <div class="col-12 col-xl-9 col-xxl-8">
     <div class="card">
       <div class="card-header">
         <h5 class="mb-0">Profile</h5>
@@ -24,25 +24,34 @@
         }
 
         <form autocomplete="off" [formGroup]="formGroup" (ngSubmit)="onUpdateProfile()">
-          <div class="mb-3">
-            <with-validation>
-              <label class="form-label">Name</label>
-              <input validate type="text" formControlName="name" class="form-control" placeholder="Name" required />
-            </with-validation>
-          </div>
-
-          <div class="mb-3">
-            <with-validation>
-              <label class="form-label">Gender</label>
-              <select-control validate formControlName="gender" inCollection="['male', 'female']" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Gender"></select-control>
-            </with-validation>
-          </div>
-
-          <div class="mb-3">
-            <with-validation>
-              <label class="form-label">Birth Date</label>
-              <input validate bsDatepicker type="text" formControlName="birth" class="form-control" placeholder="Birth Date" />
-            </with-validation>
+          <div class="form-panel mb-3">
+            <h6 class="form-panel-title">Identity</h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-group required">
+                  <with-validation>
+                    <label class="form-label">Name</label>
+                    <input validate type="text" formControlName="name" class="form-control" placeholder="Name" required />
+                  </with-validation>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <with-validation>
+                    <label class="form-label">Gender</label>
+                    <select-control validate formControlName="gender" inCollection="['male', 'female']" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Gender"></select-control>
+                  </with-validation>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <with-validation>
+                    <label class="form-label">Birth Date</label>
+                    <input validate bsDatepicker type="text" formControlName="birth" class="form-control" placeholder="Birth Date" />
+                  </with-validation>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="d-flex justify-content-end">

@@ -2,8 +2,8 @@
   <h4 class="mb-0">Security</h4>
 </div>
 
-<div class="row mt-3">
-  <div class="col-lg-8 col-md-10">
+<div class="row justify-content-center mt-3">
+  <div class="col-12 col-xl-9 col-xxl-8">
     <div class="card">
       <div class="card-header">
         <h5 class="mb-0">Security</h5>
@@ -11,25 +11,34 @@
       </div>
       <div class="card-body">
         <form autocomplete="off" [formGroup]="formGroupCredentials" (ngSubmit)="onUpdateCredentials()">
-          <div class="mb-3">
-            <with-validation>
-              <label class="form-label">Current Password</label>
-              <input validate formControlName="currentPassword" type="password" class="form-control" placeholder="Current Password" requireRelativeTo="newPassword" />
-            </with-validation>
-          </div>
-
-          <div class="mb-3">
-            <with-validation>
-              <label class="form-label">New Password</label>
-              <input validate formControlName="newPassword" type="password" class="form-control" placeholder="Minimum 8 characters" requireRelativeTo="currentPassword" minlength="8" />
-            </with-validation>
-          </div>
-
-          <div class="mb-3">
-            <with-validation>
-              <label class="form-label">Confirm Password</label>
-              <input validate formControlName="confirmPassword" type="password" class="form-control" placeholder="Re-enter new password" equalTo="newPassword" />
-            </with-validation>
+          <div class="form-panel mb-3">
+            <h6 class="form-panel-title">Login</h6>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <with-validation>
+                    <label class="form-label">Current Password</label>
+                    <input validate formControlName="currentPassword" type="password" class="form-control" placeholder="Current Password" requireRelativeTo="newPassword" />
+                  </with-validation>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <with-validation>
+                    <label class="form-label">New Password</label>
+                    <input validate formControlName="newPassword" type="password" class="form-control" placeholder="Minimum 8 characters" requireRelativeTo="currentPassword" minlength="8" />
+                  </with-validation>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <with-validation>
+                    <label class="form-label">Confirm Password</label>
+                    <input validate formControlName="confirmPassword" type="password" class="form-control" placeholder="Re-enter new password" equalTo="newPassword" />
+                  </with-validation>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="d-flex justify-content-end">
