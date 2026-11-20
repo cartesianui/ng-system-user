@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Signal, OnDestroy, computed, effect, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { BaseComponent, DatetimeService, RequestType } from '@cartesianui/platform-common';
 import { Role, Permission, PermissionsWidgetComponent, RolesLookupWidgetComponent, PermissionsLookupWidgetComponent, RolesWidgetComponent } from '@cartesianui/system-auth';
 import { ImagePickerComponent } from '@cartesianui/shared-gallery';
@@ -7,6 +7,20 @@ import { User, UserApp, UserPermission, UserRole, tenantLoginAccess } from '../.
 import { UserSandbox } from '../../user.sandbox';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { FORM_IMPORTS } from '../../user.imports';
+
+/**
+ * Birth date is optional (API: `birth` is `date|nullable`), so the 18+ check runs only once a date is entered.
+ * The shared `[age]` directive fails an empty value, which is why it is not used here.
+ */
+function minAgeWhenEntered(minAge: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (value === null || value === undefined || value === '') return null;
+    const date = DatetimeService.fromJSDate(new Date(value));
+    if (!date.isValid) return { age: 'This date is invalid.' };
+    return -date.diffNow('years').years < minAge ? { age: `Age should be at least ${minAge}.` } : null;
+  };
+}
 
 @Component({
     selector: 'edit-user',
@@ -36,8 +50,8 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
 
   formGroup: FormGroup = new FormGroup({
     name: new FormControl('', []),
-    gender: new FormControl('Gender', []),
-    birth: new FormControl('', []),
+    gender: new FormControl(null, []),
+    birth: new FormControl(null, [minAgeWhenEntered(18)]),
     nationalId: new FormControl('', [Validators.maxLength(50)])
   });
 
@@ -84,7 +98,7 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
   private readonly selectEffect = effect(() => {
     const user = this.user();
     if (!user) return;
-    const patched = { ...user, birth: DatetimeService.toJSDate(user.birth) } as User;
+    const patched = { ...user, birth: user.birth ? DatetimeService.toJSDate(user.birth) : null } as User;
     this.formGroup.patchValue(patched);
   });
 
@@ -104,8 +118,11 @@ export class EditUserComponent extends BaseComponent implements OnDestroy {
         this.user()?.id,
         new User({
           name: this.formGroup.controls.name.value,
-          gender: this.formGroup.controls.gender.value,
-          birth: DatetimeService.fromJSDate(new Date(this.formGroup.controls.birth.value)).toISO(),
+          // Both optional: blank goes as null, never '' or the 1970 epoch `new Date(null)` makes.
+          gender: this.formGroup.controls.gender.value || null,
+          birth: this.formGroup.controls.birth.value
+            ? DatetimeService.fromJSDate(new Date(this.formGroup.controls.birth.value)).toISO()
+            : null,
           // Blank clears it: `PATCH {"national_id": null}`.
           nationalId: this.formGroup.controls.nationalId.value || null
         })
