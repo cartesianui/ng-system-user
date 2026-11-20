@@ -73,18 +73,18 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="form-group required">
+                        <div class="form-group">
                           <with-validation>
                             <label class="form-label">Gender</label>
-                            <select-control validate required formControlName="gender" inCollection="['male', 'female']" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Gender"></select-control>
+                            <select-control validate formControlName="gender" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Gender"></select-control>
                           </with-validation>
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="form-group required">
+                        <div class="form-group">
                           <with-validation>
                             <label class="form-label">Birth Date</label>
-                            <input validate bsDatepicker type="text" formControlName="birth" class="form-control" placeholder="Birth Date" required age="18" />
+                            <input validate bsDatepicker type="text" formControlName="birth" class="form-control" placeholder="Birth Date" />
                           </with-validation>
                         </div>
                       </div>
