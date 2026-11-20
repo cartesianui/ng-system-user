@@ -41,44 +41,57 @@
           <div class="card">
             <div class="card-header"><strong>Profile</strong></div>
             <div class="card-body">
-              <!-- Avatar -->
-              <div class="text-center mb-3">
-                <image-picker
-                  entityType="users"
-                  [entityId]="user()?.id"
-                  mode="avatar"
-                  [editable]="true"
-                  [removable]="true"
-                  displayVariant="thumb"
-                ></image-picker>
+              <div class="row g-3 align-items-center">
+                <!-- Avatar -->
+                <div class="col-auto">
+                  <image-picker class="avatar-compact"
+                    entityType="users"
+                    [entityId]="user()?.id"
+                    mode="avatar"
+                    [editable]="true"
+                    [removable]="true"
+                    displayVariant="thumb"
+                  ></image-picker>
+                </div>
+                <div class="col">
+                  <form autocomplete="off" [formGroup]="formGroup">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group required">
+                          <with-validation>
+                            <label class="form-label">Name</label>
+                            <input validate type="text" formControlName="name" class="form-control" placeholder="Name" required />
+                          </with-validation>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <with-validation>
+                            <label class="form-label">National ID</label>
+                            <input validate type="text" formControlName="nationalId" class="form-control" placeholder="National ID" maxlength="50" />
+                          </with-validation>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group required">
+                          <with-validation>
+                            <label class="form-label">Gender</label>
+                            <select-control validate required formControlName="gender" inCollection="['male', 'female']" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Gender"></select-control>
+                          </with-validation>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group required">
+                          <with-validation>
+                            <label class="form-label">Birth Date</label>
+                            <input validate bsDatepicker type="text" formControlName="birth" class="form-control" placeholder="Birth Date" required age="18" />
+                          </with-validation>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
-
-              <form autocomplete="off" [formGroup]="formGroup">
-                <div class="form-group required">
-                  <with-validation>
-                    <label class="form-label">Name</label>
-                    <input validate type="text" formControlName="name" class="form-control" placeholder="Name" required />
-                  </with-validation>
-                </div>
-                <div class="form-group required mt-2">
-                  <with-validation>
-                    <label class="form-label">Gender</label>
-                    <select-control validate required formControlName="gender" inCollection="['male', 'female']" [options]="[{value:'male',name:'Male'},{value:'female',name:'Female'}]" optionKey="value" optionField="name" placeholder="Gender"></select-control>
-                  </with-validation>
-                </div>
-                <div class="form-group required mt-2">
-                  <with-validation>
-                    <label class="form-label">Birth Date</label>
-                    <input validate bsDatepicker type="text" formControlName="birth" class="form-control" placeholder="Birth Date" required age="18" />
-                  </with-validation>
-                </div>
-                <div class="form-group mt-2">
-                  <with-validation>
-                    <label class="form-label">National ID</label>
-                    <input validate type="text" formControlName="nationalId" class="form-control" placeholder="National ID" maxlength="50" />
-                  </with-validation>
-                </div>
-              </form>
             </div>
           </div>
         </div>
