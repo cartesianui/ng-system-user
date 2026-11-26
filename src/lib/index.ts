@@ -7,3 +7,5 @@ export * from './ui/settings/user-settings.component';
 export * from './ui/settings/user-profile.component';
 export * from './ui/settings/user-security.component';
 export * from './ui/invite/user-invite.component';
+export * from './shared/app-setup/http.service';
+export * from './ui/connect-app/connect-app-drawer.component';
