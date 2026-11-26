@@ -1,0 +1,155 @@
+<default-actions>
+  <button type="button" class="btn btn-sm btn-outline-secondary text-danger d-flex align-items-center gap-1" [disabled]="busy() || status() !== 'active'" (click)="confirmRevoke()">
+    <i class="fa-solid fa-ban"></i>
+    <span>Revoke</span>
+  </button>
+  <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" [disabled]="busy()" (click)="confirmRegenerate()">
+    <i class="fa-solid fa-rotate" [class.fa-spin]="busy()"></i>
+    <span>Regenerate</span>
+  </button>
+</default-actions>
+
+<div class="main-content">
+  <div class="row g-3">
+    <!-- Left: the QR. Veiled once the code is used, expired or revoked, or while no live link is held. -->
+    <div class="col-xl-6">
+      <div class="form-panel text-center">
+        <div class="connect-app-qr" [class.is-veiled]="veil() !== null">
+          <svg [attr.viewBox]="'0 0 ' + qr().size + ' ' + qr().size" shape-rendering="crispEdges" role="img" [attr.aria-label]="veil() === null ? 'Setup QR code' : null" [attr.aria-hidden]="veil() === null ? null : 'true'">
+            <path class="connect-app-qr__modules" [attr.d]="qr().d"></path>
+          </svg>
+          <div class="connect-app-qr__mark" aria-hidden="true"><img src="assets/img/brand/icon.svg" alt="" /></div>
+          @switch (veil()) {
+            @case ('used') {
+              <div class="connect-app-qr__veil">
+                <div class="fw-semibold">Used{{ current()?.usedDevice ? ' on ' + current()?.usedDevice : '' }}</div>
+                <div class="small text-body-secondary">Generate a new code to set up again</div>
+                <button type="button" class="btn btn-sm btn-primary" [disabled]="busy()" (click)="issue()">Generate a new code</button>
+              </div>
+            }
+            @case ('expired') {
+              <div class="connect-app-qr__veil">
+                <div class="fw-semibold">Code expired</div>
+                <div class="small text-body-secondary">Generate a new code to set up the phone</div>
+                <button type="button" class="btn btn-sm btn-primary" [disabled]="busy()" (click)="issue()">Generate a new code</button>
+              </div>
+            }
+            @case ('revoked') {
+              <div class="connect-app-qr__veil">
+                <div class="fw-semibold">Code revoked</div>
+                <div class="small text-body-secondary">Generate a new code to set up the phone</div>
+                <button type="button" class="btn btn-sm btn-primary" [disabled]="busy()" (click)="issue()">Generate a new code</button>
+              </div>
+            }
+            @case ('hidden') {
+              <div class="connect-app-qr__veil">
+                @if (busy()) {
+                  <div class="small text-body-secondary"><i class="fa-solid fa-spinner fa-spin me-1"></i>Creating a code…</div>
+                } @else if (status() === 'active') {
+                  <div class="fw-semibold">Code active</div>
+                  <div class="small text-body-secondary">The link is shown only once. Regenerate to show a new code.</div>
+                } @else {
+                  <div class="fw-semibold">No code yet</div>
+                  <button type="button" class="btn btn-sm btn-primary" (click)="issue()">Create a code</button>
+                }
+              </div>
+            }
+          }
+        </div>
+        <h6 class="mt-3 mb-1">Scan with the {{ appLabel() }}</h6>
+        <p class="small text-body-secondary mb-0">
+          On the phone: open the {{ appLabel() }} and tap <strong>Scan setup code</strong>. One-time code for {{ user().name || 'this user' }} only.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-xl-6 d-flex flex-column gap-3">
+      <!-- Or send the link (only while a live link is held) -->
+      @if (veil() === null && link(); as url) {
+        <div class="form-panel">
+          <h6 class="form-panel-title">Or send the link</h6>
+          <div class="connect-app-link d-flex align-items-center gap-2 p-1 ps-2 mb-2">
+            <i class="fa-solid fa-link text-body-secondary"></i>
+            <span class="connect-app-link__url flex-grow-1 small font-monospace" [attr.title]="url">{{ url }}</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0" (click)="copy(url)" [attr.aria-label]="copied() ? 'Copied' : 'Copy link'">
+              <i class="fa-regular" [class.fa-copy]="!copied()" [class.fa-solid]="copied()" [class.fa-check]="copied()" [class.text-success]="copied()"></i>
+              <span>{{ copied() ? 'Copied' : 'Copy' }}</span>
+            </button>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" [href]="whatsappHref(url)" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span>
+            </a>
+            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" [href]="smsHref(url)">
+              <i class="fa-solid fa-comment-sms"></i><span>SMS</span>
+            </a>
+            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" [href]="mailHref(url)">
+              <i class="fa-regular fa-envelope"></i><span>Email</span>
+            </a>
+            @if (canShare) {
+              <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" (click)="share(url)">
+                <i class="fa-solid fa-share-nodes"></i><span>Share…</span>
+              </button>
+            }
+          </div>
+          <p class="small text-body-secondary mt-2 mb-0">Opening the link on the phone starts the app's setup; the email is prefilled, only the password is typed.</p>
+        </div>
+      }
+
+      <!-- This code -->
+      <div class="form-panel">
+        <h6 class="form-panel-title">This code</h6>
+        <div class="connect-app-kv small">
+          <div class="d-flex justify-content-between gap-3 py-2">
+            <span class="text-body-secondary">Status</span>
+            <span class="d-inline-flex align-items-center gap-2 text-{{ statusMeta.getColor(status()) }}-emphasis">
+              <span class="connect-app-dot bg-{{ statusMeta.getColor(status()) }}"></span>{{ statusMeta.getLabel(status()) }}
+            </span>
+          </div>
+          <div class="d-flex justify-content-between gap-3 py-2">
+            <span class="text-body-secondary">Expiry</span>
+            <span class="text-end">{{ expiryText() }}</span>
+          </div>
+          @if (status() === 'used') {
+            <div class="d-flex justify-content-between gap-3 py-2">
+              <span class="text-body-secondary">Used</span>
+              <span class="text-end">{{ at(current()?.usedAt) }}</span>
+            </div>
+            @if (deviceText()) {
+              <div class="d-flex justify-content-between gap-3 py-2">
+                <span class="text-body-secondary">Device</span>
+                <span class="text-end">{{ deviceText() }}</span>
+              </div>
+            }
+          }
+          <div class="d-flex justify-content-between gap-3 py-2">
+            <span class="text-body-secondary">Signs in as</span>
+            <span class="text-end text-break">{{ user().email || '—' }}</span>
+          </div>
+          @if (workspace(); as ws) {
+            <div class="d-flex justify-content-between gap-3 py-2">
+              <span class="text-body-secondary flex-shrink-0">Workspace</span>
+              @if (ws.kind === 'set') {
+                <span class="text-end text-break">{{ ws.text }}</span>
+              } @else {
+                <span class="text-end text-warning-emphasis">
+                  <i class="fa-solid fa-triangle-exclamation me-1"></i>No domain set — the app can't be set up until the workspace has a domain.
+                </span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="form-panel">
+        <h6 class="form-panel-title">How it works</h6>
+        <ol class="list-unstyled d-flex flex-column gap-2 mb-0 small">
+          <li class="d-flex align-items-center gap-2"><span class="connect-app-step">1</span>Install the {{ appLabel() }} on the phone.</li>
+          <li class="d-flex align-items-center gap-2"><span class="connect-app-step">2</span>Scan this code, or open the link on the phone.</li>
+          <li class="d-flex align-items-center gap-2"><span class="connect-app-step">3</span>The app sets up the workspace; only the password is typed.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,7 +8,8 @@
     "@cartesianui/platform-core": "^2.0.0",
     "@cartesianui/platform-common": "^1.0.0",
     "@cartesianui/system-auth": "^1.0.0",
-    "@cartesianui/system-configuration": "^0.1.0"
+    "@cartesianui/system-configuration": "^0.1.0",
+    "qrcode-generator": "^2.0.4"
   },
   "dependencies": {
     "tslib": "^2.4.0"
