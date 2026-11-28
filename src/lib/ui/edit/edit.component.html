@@ -39,7 +39,15 @@
       <div class="row">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header"><strong>Profile</strong></div>
+            <!-- The username as the card title, copyable (email when there is none), as on the document edit forms (owner 2026-11-28). -->
+            <div class="card-header d-flex align-items-center flex-wrap gap-2">
+              @if (user()?.username || user()?.email) {
+                <doc-number [value]="user()?.username || user()?.email" [id]="user()?.id"></doc-number>
+              } @else {
+                <strong>Profile</strong>
+                <doc-number idOnly [id]="user()?.id"></doc-number>
+              }
+            </div>
             <div class="card-body">
               <div class="row g-3 align-items-center">
                 <!-- Avatar -->
